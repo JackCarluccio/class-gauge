@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Capture</title>
+</head>
+<body>
+    <h1>Webcam Capture</h1>
+    <video id="webcam" autoplay></video>
+    <br>
+    <button onclick="takePicture()">Take Picture</button>
+    <br>
+    <canvas id="snapshot" style="display:none;"></canvas>
+    <br>
+    <img id="capturedImage" style="display:none;" alt="Captured Image">
+
+    <script>
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('webcam');
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.error('Error accessing webcam:', error);
+            });
+
+        // Take picture and send to Flask
+        function takePicture() {
+            var video = document.getElementById('webcam');
+            var canvas = document.getElementById('snapshot');
+            var img = document.getElementById('capturedImage');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            var imageDataURL = canvas.toDataURL('image/png');
+
+            fetch('/save_image', {
+                method: 'POST',
+                body: JSON.stringify({ image: imageDataURL }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                img.src = "/get_image?" + new Date().getTime(); // Prevent caching
+                img.style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
