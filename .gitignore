@@ -1,5 +1,7 @@
 .venv
 .env
 
+/src/__pycache__/
+
 # Model for speech to text
 /vosk-model-small-en-us-0.15/
