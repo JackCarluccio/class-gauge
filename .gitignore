@@ -1,6 +1,9 @@
 .venv
 .env
 
+/src/__pycache__/
+
+# Images used in determining student names
 /images/
 
 # Model for speech to text
