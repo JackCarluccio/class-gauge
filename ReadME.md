@@ -24,12 +24,11 @@ ClassGauge addresses the challenge of accurately and objectively measuring stude
 * **Participation Analysis:** Leverages Google Gemini to analyze the transcribed text, assessing the relevance, depth, and quality of student participation.
 * **Data Visualization:** (Future Implementation) Presents participation data in a user-friendly dashboard, providing instructors with actionable insights.
 * **OpenVINO Optimization:** Uses OpenVINO for optimized performance of computer vision models on Intel hardware.
-* **Intel RealSense Integration:**  Supports depth sensing with Intel RealSense cameras for enhanced student tracking.
 * **Flask Web Interface:** Provides a user-friendly web interface for accessing and managing ClassGauge.
 
 ## Technologies Used
 
-* **Computer Vision:** OpenCV, YOLO, OpenVINO, Intel RealSense
+* **Computer Vision:** OpenCV, YOLO, OpenVINO
 * **Speech-to-Text:** VOSK
 * **Large Language Model:** Google Gemini
 * **Backend:** Flask (Python)
@@ -41,17 +40,16 @@ Detailed installation instructions will be provided soon.  This will include:
 
 1. Setting up the development environment (including Python, C++, and necessary libraries).
 2. Installing the required dependencies (OpenCV, VOSK, Flask, etc.).
-3. Configuring the Intel RealSense camera (if applicable).
-4. Obtaining API keys for Google Gemini.
-5. Building the C++ components.
-6. Running the Flask web application.
+3. Obtaining API keys for Google Gemini.
+4. Building the C++ components.
+5. Running the Flask web application.
 
 ### Vision and backend on `dev` branch
 
 ## Usage
 
 1. Start the Flask web application.
-2. Connect the Intel RealSense camera (if applicable).
+2. Connect your camera (future applications may use multiple cameras)
 3. Calibrate the system for the classroom environment.
 4. Begin class. ClassGauge will automatically detect students, transcribe their contributions, and analyze their participation.
 5. Access the participation data through the web interface.
