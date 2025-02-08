@@ -1,5 +1,7 @@
 .venv
 .env
 
+/images/
+
 # Model for speech to text
 /vosk-model-small-en-us-0.15/
