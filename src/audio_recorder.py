@@ -1,7 +1,6 @@
 import pyaudio
 import wave
 import threading
-import time
 import numpy as np
 
 # Global variables to maintain state
@@ -78,23 +77,3 @@ def play_audio(audio_data):
 
 def cleanup():
     _audio.terminate()
-
-
-# Example usage
-if __name__ == "__main__":
-    print("Starting recording...")
-    start_recording()
-    
-    # Record for 5 seconds
-    time.sleep(5)
-    
-    print("Stopping recording...")
-    audio_data = stop_recording()
-    
-    print("Playing back the recording...")
-    play_audio(audio_data)
-    
-    print("Saving recording to file...")
-    save_to_wav("recording.wav", audio_data)
-    
-    cleanup()
