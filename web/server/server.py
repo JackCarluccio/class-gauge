@@ -6,13 +6,9 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Ensure the "images" directory exists
 IMAGE_DIR = "images"
-img_name = ""
+global img_name
 os.makedirs(IMAGE_DIR, exist_ok=True)
 
-# Serve the main webpage
-@app.route('/')
-def home():
-    return render_template("index.html")  # This will load templates/index.html
 
 # Route to save the image
 @app.route('/save_image', methods=['POST'])
@@ -40,6 +36,16 @@ def save_image():
 @app.route('/get_image', methods=['GET'])
 def get_image():
     return send_from_directory(IMAGE_DIR, img_name)
+
+
+@app.route('/')  # Root URL will now load upload.html
+def upload():
+    return render_template('upload.html')  
+
+@app.route('/data')
+def data():
+    return render_template('data.html')  
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
