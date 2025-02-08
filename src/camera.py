@@ -8,15 +8,12 @@ class Camera:
         self.config = rs.config()
         self.config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 
-
     def register_callback(self, callback):
         self._callbacks.append(callback)
-
 
     def _notify_callbacks(self, frame):
         for callback in self._callbacks:
             callback(frame)
-
 
     def start(self):
         self.pipeline.start(self.config)
@@ -33,7 +30,6 @@ class Camera:
             print("Camera stream interrupted by user.")
         finally:
             self.pipeline.stop()
-
 
 # Example usage:
 if __name__ == "__main__":

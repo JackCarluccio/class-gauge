@@ -23,7 +23,3 @@ chat_session = model.start_chat()
 def is_question_reasonable(student_question, professor_response):
     response = chat_session.send_message(f"{PROMPT}\nStudent: {student_question}\nProfessor: {professor_response}")
     return response.text.strip().lower() == "yes"
-
-
-print(is_question_reasonable("What is the capital of France?", "The capital of France is Paris."))
-print(is_question_reasonable("Professor how was your weekened", "Fine thank you"))
