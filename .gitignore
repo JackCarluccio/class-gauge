@@ -1,0 +1,12 @@
+.venv
+.env
+
+/src/__pycache__/
+
+# Images used in determining student names
+/images/
+
+# Model for speech to text
+/vosk-model-small-en-us-0.15/
+
+/open_model_zoo/models
