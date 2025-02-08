@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Capture</title>
+    <title>Take Picture</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Webcam Capture</h1>
@@ -14,6 +15,13 @@
     <canvas id="snapshot" style="display:none;"></canvas>
     <br>
     <img id="capturedImage" style="display:none;" alt="Captured Image">
+    <br>
+    <input type="text" id="enter name" placeholder="enter student username">
+    <br>
+    <p id="errorText" style="color: red;"></p>
+
+
+
 
     <script>
         // Access webcam
@@ -27,9 +35,12 @@
             });
 
         // Take picture and send to Flask
+        var taskInput = document.getElementById('enter name');
+
         function takePicture() {
+            if (taskInput.value.trim() !== "") {
             var video = document.getElementById('webcam');
-            var canvas = document.getElementById('snapshot');
+            var canvas = document.getElementById("snapshot");
             var img = document.getElementById('capturedImage');
 
             canvas.width = video.videoWidth;
@@ -42,8 +53,9 @@
 
             fetch('/save_image', {
                 method: 'POST',
-                body: JSON.stringify({ image: imageDataURL }),
-                headers: { 'Content-Type': 'application/json' }
+                body: JSON.stringify({ image: imageDataURL, name : taskInput.value}),
+                headers: { 'Content-Type': 'application/json'
+            }
             })
             .then(response => response.json())
             .then(data => {
@@ -52,6 +64,10 @@
                 img.style.display = 'block';
             })
             .catch(error => console.error('Error:', error));
+        }
+        else{
+           document.getElementById('errorText').textContent = "please enter user name";
+        }
         }
     </script>
 </body>

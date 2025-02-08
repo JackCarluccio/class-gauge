@@ -6,6 +6,7 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Ensure the "images" directory exists
 IMAGE_DIR = "images"
+img_name = ""
 os.makedirs(IMAGE_DIR, exist_ok=True)
 
 # Serve the main webpage
@@ -18,6 +19,7 @@ def home():
 def save_image():
     data = request.json
     image_data = data.get("image", "")
+    img_name = data.get("name", "").lower().strip()+".png"
 
     if not image_data.startswith("data:image/png;base64,"):
         return jsonify({"message": "Invalid image format"}), 400
@@ -27,7 +29,7 @@ def save_image():
 
     # Decode and save the image
     image_bytes = base64.b64decode(image_data)
-    image_path = os.path.join(IMAGE_DIR, "snapshot.png")
+    image_path = os.path.join(IMAGE_DIR, img_name)
 
     with open(image_path, "wb") as f:
         f.write(image_bytes)
@@ -37,7 +39,7 @@ def save_image():
 # Route to serve the saved image
 @app.route('/get_image', methods=['GET'])
 def get_image():
-    return send_from_directory(IMAGE_DIR, "snapshot.png")
+    return send_from_directory(IMAGE_DIR, img_name)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
