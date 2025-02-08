@@ -3,16 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Data Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
 </head>
+
 <body>
-    <h1>Display Page</h1>
-    <p>This is a separate page where you can show something different.</p>
+    <div class="container">
+        <h1>Leaderboard</h1>
+        <table id="leaderboard">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Questions Answered</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+<script>
+// Leaderboard data
+let leaderboard = [];
+
+// Function to update the leaderboard table
+function updateLeaderboard() {
+    const tbody = document.getElementById('leaderboard').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+
+    // Sort leaderboard by questions answered (descending order)
+    leaderboard.sort((a, b) => b.questionsAnswered - a.questionsAnswered);
+
+    // Populate table
+    leaderboard.forEach(person => {
+        const row = tbody.insertRow();
+        const nameCell = row.insertCell(0);
+        const questionsCell = row.insertCell(1);
+        nameCell.textContent = person.name;
+        questionsCell.textContent = person.questionsAnswered;
+    });
+}
+
+// Function to fetch the latest leaderboard data
+function fetchLeaderboard() {
+    fetch('/getLeaderboard')
+        .then(response => response.json())
+        .then(data => {
+            leaderboard = data.leaderboard;
+            updateLeaderboard();
+        })
+        .catch(error => console.error('Error fetching leaderboard:', error));
+}
+
+// Function to add a new person to the leaderboard
+//function addPerson() {
+    // // const nameInput = document.getElementById('nameInput');
+    // // const name = nameInput.value.trim();
     
-    <a href="{{ url_for('upload') }}">
-        <button>Go to upload Page</button>
-    </a>
-    
+    // if (name) {
+    //     // Check if person already exists
+    //     let person = leaderboard.find(p => p.name === name);
+    //     if (!person) {
+    //         // Add new person
+    //         person = { name: name, questionsAnswered: 0 };
+    //         leaderboard.push(person);
+    //         sendAddPersonRequest(person);
+    //     }
+        
+    //     // Clear input
+    // }
+
+    // updateLeaderboard();
+//}
+
+// Function to increment questions answered
+function incrementScore(name) {
+    const person = leaderboard.find(p => p.name === name);
+    if (person) {
+        person.questionsAnswered += 1;
+        sendUpdateScoreRequest(person);
+    }
+    updateLeaderboard();
+}
+
+// Send HTTP request to add a new person
+function sendAddPersonRequest(person) {
+    fetch('/addPerson', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(person)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Person added:', data))
+    .catch(error => console.error('Error adding person:', error));
+}
+
+// Send HTTP request to update score
+function sendUpdateScoreRequest(person) {
+    fetch('/updateScore', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(person)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Score updated:', data))
+    .catch(error => console.error('Error updating score:', error));
+}
+
+// Polling mechanism to fetch leaderboard data every 5 seconds
+setInterval(fetchLeaderboard, 500);
+
+// Initial fetch to populate leaderboard on page load
+window.onload = fetchLeaderboard;
+
+</script>
 </body>
+
 </html>

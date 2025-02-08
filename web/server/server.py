@@ -15,7 +15,7 @@ os.makedirs(IMAGE_DIR, exist_ok=True)
 def save_image():
     data = request.json
     image_data = data.get("image", "")
-    img_name = data.get("name", "").lower().strip()+".png"
+    img_name = data.get("name", "").lower().replace(" ","")+".png"
 
     if not image_data.startswith("data:image/png;base64,"):
         return jsonify({"message": "Invalid image format"}), 400
@@ -45,6 +45,27 @@ def upload():
 @app.route('/data')
 def data():
     return render_template('data.html')  
+
+leaderboard = []
+
+@app.route('/addPerson', methods=['POST'])
+def add_person():
+    person = request.json
+    leaderboard.append(person)
+    return jsonify({'status': 'success', 'person': person})
+
+@app.route('/updateScore', methods=['POST'])
+def update_score():
+    updated_person = request.json
+    for person in leaderboard:
+        if person['name'] == updated_person['name']:
+            person['questionsAnswered'] = updated_person['questionsAnswered']
+            break
+    return jsonify({'status': 'success', 'person': updated_person})
+
+@app.route('/getLeaderboard', methods=['GET'])
+def get_leaderboard():
+    return jsonify({'leaderboard': leaderboard})
 
 
 if __name__ == '__main__':

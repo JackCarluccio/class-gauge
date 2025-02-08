@@ -39,6 +39,8 @@
 
         function takePicture() {
             if (taskInput.value.trim() !== "") {
+            document.getElementById('errorText').textContent = "";
+
             var video = document.getElementById('webcam');
             var canvas = document.getElementById("snapshot");
             var img = document.getElementById('capturedImage');
@@ -66,7 +68,7 @@
             .catch(error => console.error('Error:', error));
         }
         else{
-           document.getElementById('errorText').textContent = "please enter user name";
+           document.getElementById('errorText').textContent = "Please enter a name.";
         }
         }
     </script>
