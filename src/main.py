@@ -4,6 +4,7 @@ import text_transcription
 import question_validation
 import participation_tracker
 import time
+import random
 import threading
 from queue import Queue
 
@@ -25,7 +26,7 @@ def process_audio(audio_data):
     print("Transcription:", text)
     is_valid = question_validation.validate_question(text)
     if is_valid:
-        participation_tracker.increment_participation_score(NAMES[0])
+        participation_tracker.increment_participation_score(random.choice(NAMES))
 
 
 def conversation_worker():
