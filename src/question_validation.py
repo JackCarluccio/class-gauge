@@ -25,5 +25,5 @@ def validate_question(transcription):
         return False
 
     response = chat_session.send_message(f"{PROMPT}\nTranscription: {transcription}")
-    print("Response:", response.text.strip())
+    print(f'Response: {response.text.strip().lower()}\n')
     return response.text.strip().lower() == "yes"

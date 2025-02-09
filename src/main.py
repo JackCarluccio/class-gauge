@@ -1,4 +1,4 @@
-import camera
+#import camera
 import audio_recorder
 import text_transcription
 import question_validation
@@ -17,13 +17,12 @@ time_of_question = None
 is_processing_conversation = False
 conversation_queue = Queue()
 
-camera = camera.Camera()
+#camera = camera.Camera()
 
 
 def process_audio(audio_data):
-    print("Processing audio...")
     text = text_transcription.transcribe_audio(audio_data)
-    print("Transcription:", text)
+    print(f'\nTranscribed audio: {text}')
     is_valid = question_validation.validate_question(text)
     if is_valid:
         participation_tracker.increment_participation_score(random.choice(NAMES))
@@ -59,7 +58,7 @@ def on_camera_frame(frame):
 
     detected_hand_raise = True
     if detected_hand_raise and not is_processing_conversation:
-        print("Detected a hand raise!")
+        print('Detected a hand raise!')
         time_of_question = time.time()
         begin_conversation()
     
@@ -68,6 +67,13 @@ def on_camera_frame(frame):
         end_conversation()
 
 
+def start_simulated_camera_frames_cycle():
+    while True:
+        on_camera_frame(None)
+        time.sleep(1/30)
+
+
 threading.Thread(target=conversation_worker, daemon=True).start()
-camera.register_callback(on_camera_frame)
-threading.Thread(target=camera.start).start()
+threading.Thread(target=start_simulated_camera_frames_cycle).start()
+#camera.register_callback(on_camera_frame)
+#threading.Thread(target=camera.start).start()
