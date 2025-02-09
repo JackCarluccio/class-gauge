@@ -2,11 +2,15 @@ import camera
 import audio_recorder
 import text_transcription
 import question_validation
+import participation_tracker
 import time
 import threading
 from queue import Queue
 
-QUESTION_PROCESSING_TIME = 10
+NAMES = ['Jack', 'Anthony', 'Rafayel']
+
+QUESTION_BUFFERING_TIME = 1.0
+QUESTION_PROCESSING_TIME = 5.0
 
 time_of_question = None
 is_processing_conversation = False
@@ -20,6 +24,8 @@ def process_audio(audio_data):
     text = text_transcription.transcribe_audio(audio_data)
     print("Transcription:", text)
     is_valid = question_validation.validate_question(text)
+    if is_valid:
+        participation_tracker.increment_participation_score(NAMES[0])
 
 
 def conversation_worker():
